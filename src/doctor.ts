@@ -41,6 +41,10 @@ export function checkChrome(file: string = BROWSER.chromePath): Check {
 
 /** How Claude is reached: Claude Code on the person's subscription, or the Claude API on their own key. */
 export function checkClaude(): Check {
+  if (writerBackend() === "codex") {
+    const r = spawnSync(WRITER.codexCommand, ["--version"], { encoding: "utf8", env: childEnv() });
+    return { name: "Codex", ok: r.status === 0, detail: r.status === 0 ? r.stdout.trim() : "the codex command was not found", fix: "Install Codex CLI and run codex login. Run doctor --online to check model access." };
+  }
   if (writerBackend() === "api") {
     return { name: "Claude", ok: true, detail: `the Claude API, billed to ANTHROPIC_API_KEY in .env (${WRITER.model})`, fix: "" };
   }
@@ -134,6 +138,14 @@ export async function checkKeyOnline(): Promise<Check> {
 
 /** One tiny Claude call: proves the sign-in or the key works and the writer's model is available. */
 export async function checkClaudeOnline(): Promise<Check> {
+  if (writerBackend() === "codex") {
+    try {
+      const text = await askWriter("ok?", "Reply with the single word ok.");
+      return { name: "Codex answers", ok: text.trim().toLowerCase() === "ok", detail: `Codex CLI, ${WRITER.codexModel}`, fix: "Run codex login and check model access." };
+    } catch {
+      return { name: "Codex answers", ok: false, detail: "Codex could not answer", fix: "Run codex login and check model access." };
+    }
+  }
   if (writerBackend() === "api") {
     try {
       const text = await askWriter("ok?", "Reply with the single word ok.");
