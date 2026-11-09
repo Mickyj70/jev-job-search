@@ -265,6 +265,8 @@ export const BROWSER = {
  */
 export const WRITER = {
   command: "claude",
+  codexCommand: "codex",
+  codexModel: "gpt-5.4",
   model: "claude-sonnet-5-5",
   effort: "low",
   timeoutMs: 180_000,
@@ -471,7 +473,7 @@ export const REPORT = {
   statuses: ["applied", "needs_review", "queued", "skipped", "blocked", "failed"],
 } as const;
 
-export type WriterBackend = "claude-code" | "api";
+export type WriterBackend = "claude-code" | "api" | "codex";
 
 /**
  * How Claude is reached. Claude Code runs headless on the person's own subscription and is the
@@ -480,7 +482,7 @@ export type WriterBackend = "claude-code" | "api";
  */
 export function writerBackend(): WriterBackend {
   const asked = (process.env.WRITER_BACKEND ?? "").trim();
-  if (asked === "claude-code" || asked === "api") return asked;
+  if (asked === "claude-code" || asked === "api" || asked === "codex") return asked;
   return process.env.ANTHROPIC_API_KEY ? "api" : "claude-code";
 }
 

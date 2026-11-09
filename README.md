@@ -19,6 +19,27 @@ An open-source job application tool built on [Claude Code](https://claude.com/cl
 
 > This is an independent open-source project. It is not affiliated with, endorsed by or maintained by Anthropic, OpenRouter, or any job board. There is no token, coin or paid tier; the only ways to support it are using it and contributing on GitHub.
 
+## Codex version
+
+This fork also supports **OpenAI Codex**, including the runtime writer for answers,
+tracking notes and tailored resumes. Claude is optional when you select Codex.
+The sections below describe the original Claude workflow; follow
+[the Codex guide](docs/CODEX.md) for this fork.
+
+```bash
+git clone https://github.com/Mickyj70/jev-job-search.git
+cd jev-job-search
+npm ci
+cp .env.example .env
+# In .env, set WRITER_BACKEND=codex and add your OpenRouter key yourself.
+codex login
+codex
+```
+
+In Codex, ask **"Set up my job search using the jev-setup skill"**, or use
+`$jev-setup`. Open this folder as a project if using the Codex app.
+A Mac with Chrome and Node 22 is still required for real application runs.
+
 ## Does it actually work?
 
 It is how I run my own search. I sent 100 applications in less than 10 minutes across Ashby, Lever, Workable, Rippling, BambooHR, Jobvite and JazzHR forms, for about a dollar in JEV, while fixing what it got wrong on each new kind of form. Every answer on every one of those forms was read back from the page before it was sent, and every form it could not finish truthfully is in `applications/manual.csv` with the reason. The numbers it reports about itself are in [How well it works](docs/USAGE.md#how-well-it-works). I will add what came of the applications once I know.
